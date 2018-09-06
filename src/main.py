@@ -17,8 +17,10 @@ print('******* Import complete *******')
 t0=time.time()
 
 # Remove existing output files
-os.remove("ITER")
-os.remove("OUT")
+if os.path.isfile("ITER"):
+    os.remove("ITER")
+if os.path.isfile("OUT"):
+    os.remove("OUT")
 
 rd.seed()
 

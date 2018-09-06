@@ -337,7 +337,7 @@ def TrainCNN():
             
 
 
-                file_io.witer("Iteration: "+str(iter+1)+"/"+str(num_epochs*n_train_batches)+", training cost: "+str(cost_ij)+", validation cost: "+str(valid_score))
+            file_io.witer("Iteration: "+str(iter+1)+"/"+str(num_epochs*n_train_batches)+", training cost: "+str(cost_ij)+", validation cost: "+str(valid_score))
                             
             if (iter%hyppar.accumulate_predictions==0):
                 # Get predicted labels from validation set

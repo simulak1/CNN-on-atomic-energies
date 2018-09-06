@@ -196,20 +196,20 @@ def setStructureParameters():
     file_io.wout(' Number of fully connected layers    : '+str(NFC))
 
     file_io.wout('\n Shape of the input (x,y,z):')
-    file_io.wout(in_x,in_y,in_z)
+    file_io.wout(str(in_x)+','+str(in_y)+','+str(in_z))
     file_io.wout('\n')
 
     for i in range(NCL):    
     
         file_io.wout("*** Convlayer "+ str(i+1)+" ***")
         file_io.wout('Filter shape:') # Generalize!!!!!!!!!!!!                                                  
-        file_io.wout(filter[i][0],filter[i][1])
+        file_io.wout(str(filter[i][0])+','+str(filter[i][1]))
         file_io.wout(' Pooling:')
-        file_io.wout(pool[i][0],pool[i][1])
+        file_io.wout(str(pool[i][0])+','+str(pool[i][1]))
         file_io.wout(' Activation: ')
         file_io.wout(activation[i])
         file_io.wout('Output image1:')
-        file_io.wout(Nchannel[i+1],image_spec_x[i+1],image_spec_y[i+1])
+        file_io.wout(str(Nchannel[i+1])+','+str(image_spec_x[i+1])+','+str(image_spec_y[i+1]))
         file_io.wout('\n')
 
     for i in range(NFC):
