@@ -1,4 +1,6 @@
 import cnn
+import file_io
+
 ###### DEFAULT VALUES: ###############
 datapath = "/wrk/krsimula/DONOTREMOVE/NEURAL_NETWORKS/CNN-on-atomic-energies/"
 current_dir= "."
@@ -180,7 +182,7 @@ def setStructureParameters():
         image_spec_x.append(int(image_spec_x[i-1]-filter[i-1][0]+1))
         image_spec_y.append(int(image_spec_y[i-1]-filter[i-1][1]+1))
         if (image_spec_x[i] < 1 or image_spec_y[i] < 1):
-            print("\n ERROR!!! Too large filter in convlayer "+str(i)+" \n")
+            file_io.wout("\n ERROR!!! Too large filter in convlayer "+str(i)+" \n")
         if (ignore_border):
             image_spec_x[i]=int((image_spec_x[i]-image_spec_x[i]%pool[i-1][0])/pool[i-1][0])
             image_spec_y[i]=int((image_spec_y[i]-image_spec_y[i]%pool[i-1][1])/pool[i-1][1])
@@ -189,32 +191,32 @@ def setStructureParameters():
             image_spec_y[i]=int((image_spec_y[i]+image_spec_y[i]%pool[i-1][1])/pool[i-1][1])
 
         
-    print('\n STRUCTURE OF NETWORK')
-    print('\n Number of convolutional layers      : '+str(NCL))
-    print(' Number of fully connected layers    : '+str(NFC))
+    file_io.wout('\n STRUCTURE OF NETWORK')
+    file_io.wout('\n Number of convolutional layers      : '+str(NCL))
+    file_io.wout(' Number of fully connected layers    : '+str(NFC))
 
-    print('\n Shape of the input (x,y,z):')
-    print(in_x,in_y,in_z)
-    print('\n')
+    file_io.wout('\n Shape of the input (x,y,z):')
+    file_io.wout(in_x,in_y,in_z)
+    file_io.wout('\n')
 
     for i in range(NCL):    
     
-        print("*** Convlayer "+ str(i+1)+" ***")
-        print('Filter shape:') # Generalize!!!!!!!!!!!!                                                  
-        print(filter[i][0],filter[i][1])
-        print(' Pooling:')
-        print(pool[i][0],pool[i][1])
-        print(' Activation: ')
-        print(activation[i])
-        print('Output image1:')
-        print(Nchannel[i+1],image_spec_x[i+1],image_spec_y[i+1])
-        print('\n')
+        file_io.wout("*** Convlayer "+ str(i+1)+" ***")
+        file_io.wout('Filter shape:') # Generalize!!!!!!!!!!!!                                                  
+        file_io.wout(filter[i][0],filter[i][1])
+        file_io.wout(' Pooling:')
+        file_io.wout(pool[i][0],pool[i][1])
+        file_io.wout(' Activation: ')
+        file_io.wout(activation[i])
+        file_io.wout('Output image1:')
+        file_io.wout(Nchannel[i+1],image_spec_x[i+1],image_spec_y[i+1])
+        file_io.wout('\n')
 
     for i in range(NFC):
-        print("***  FC layer "+ str(i+1)+" ***")
-        print('N_out:'+str(fc_out[i]) ) # Generalize!!!!!!!!!!!!
-        print(' Activation   : '+fc_activation[i])
-        print('\n')
+        file_io.wout("***  FC layer "+ str(i+1)+" ***")
+        file_io.wout('N_out:'+str(fc_out[i]) ) # Generalize!!!!!!!!!!!!
+        file_io.wout(' Activation   : '+fc_activation[i])
+        file_io.wout('\n')
 
 # parse: look value for keyword from input
 def parse(filename,varname):
@@ -356,12 +358,12 @@ def setInput(filename='input'):
         Ntest = int(Ntest_buffer[0])
 
     if(Ntrain+Nval+Ntest<Ndata or Ntrain+Nval+Ntest>Ndata):
-        print("!!! Error! Data split not consistent with Ndata !!!")
+        file_io.wout("!!! Error! Data split not consistent with Ndata !!!")
 
     task_buffer = parse(filename,'task')
     if len(task_buffer) > 0:
         task = task_buffer[0]
-        if not(task=='regression' or task=='classification'):print("ERROR: Task specified incorrectly!")
+        if not(task=='regression' or task=='classification'):file_io.wout("ERROR: Task specified incorrectly!")
 
     if(task=='classification'):
         Nclass_buffer = parse(filename,'Nclass')
@@ -572,26 +574,26 @@ def setInput(filename='input'):
         elif(buffer[0]=='CC'):
             cost_function=cnn.categorical_cross_entropy
         
-    print("\n *** Reading input: Done ***")
+    file_io.wout("\n *** Reading input: Done ***")
     
-    print("\n Data is read from directory: "+datapath)
+    file_io.wout("\n Data is read from directory: "+datapath)
     
-    print("\n DATASET PARAMETERS:")
+    file_io.wout("\n DATASET PARAMETERS:")
     
-    print('\n Number of datapoints                : '+str(Ndata) )
-    print(' Number of augmentation points       : '+str(Naug))
-    print(' Number of total data                : '+str(Ndata+Naug))
-    print('\n Number of training points           : '+str(Ntrain))
-    print(' Number of validation points         : '+str(Nval))
-    print(' Number of test points         : '+str(Ntest))
+    file_io.wout('\n Number of datapoints                : '+str(Ndata) )
+    file_io.wout(' Number of augmentation points       : '+str(Naug))
+    file_io.wout(' Number of total data                : '+str(Ndata+Naug))
+    file_io.wout('\n Number of training points           : '+str(Ntrain))
+    file_io.wout(' Number of validation points         : '+str(Nval))
+    file_io.wout(' Number of test points         : '+str(Ntest))
 
-    print('\n OPTIMIZATION PARAMETERS:')
+    file_io.wout('\n OPTIMIZATION PARAMETERS:')
 
-    print('\n Learning rate                       : '+str(learning_rate))
-    print(' Number of epochs                    : '+str(Nepoch))
-    print(' Minibatch size                      : '+str(mbs))
+    file_io.wout('\n Learning rate                       : '+str(learning_rate))
+    file_io.wout(' Number of epochs                    : '+str(Nepoch))
+    file_io.wout(' Minibatch size                      : '+str(mbs))
 
-    print('\n REGULARIZATION')
-    print('\n Regularization : '+str(reg))
+    file_io.wout('\n REGULARIZATION')
+    file_io.wout('\n Regularization : '+str(reg))
 
 

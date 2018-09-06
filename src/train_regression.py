@@ -8,6 +8,7 @@ import hyppar
 import datapar
 import load_data
 import statistics
+import file_io
 
 def CNNStructure(input,mini_batch_size,rng):
     
@@ -33,7 +34,7 @@ def CNNStructure(input,mini_batch_size,rng):
         elif (activation[i]=="sigmoid"):
             activation_function.append(T.nnet.sigmoid)
         else :
-            print(str(i+1)+": UNKNOWN ACTIVATION!!!!!!!!")
+            file_io.wout(str(i+1)+": UNKNOWN ACTIVATION!!!!!!!!")
 
     fc_activation=[]
     for i in range(NFC):
@@ -130,7 +131,7 @@ def TrainCNN():
     n_valid_batches //= mini_batch_size
     n_test_batches //= mini_batch_size
         
-    print('train: %d batches, validation: %d batches, testing: %d batches'
+    file_io.wout('train: %d batches, validation: %d batches, testing: %d batches'
           % (n_train_batches, n_valid_batches, n_test_batches))
 
     # mini-batch index
@@ -140,7 +141,7 @@ def TrainCNN():
     # Target energies (1 x mini_batch_size)
     y = T.matrix('y')
     
-    print('***** Constructing model ***** ')
+    file_io.wout('***** Constructing model ***** ')
     
     # Reshaping tensor of mini_batch_size set of images into a
     # 4-D tensor of dimensions: (mini_batch_size , 1 , in_x , in_y)
@@ -291,8 +292,9 @@ def TrainCNN():
 
     statistics.saveParameters(params)
 
+    
      # This is where we call the previously defined Theano functions.
-    print('***** Training model *****')
+    file_io.wout('***** Training model *****')
     while (epoch < num_epochs):
         epoch = epoch + 1
         for minibatch_index in range(n_train_batches):
@@ -333,7 +335,9 @@ def TrainCNN():
                 # Save validation error
                 valid_error.append(valid_score)
             
-            if(iter%1==0):print("Iteration: "+str(iter+1)+"/"+str(num_epochs*n_train_batches)+", training cost: "+str(cost_ij)+", validation cost: "+str(valid_score))
+
+
+                file_io.witer("Iteration: "+str(iter+1)+"/"+str(num_epochs*n_train_batches)+", training cost: "+str(cost_ij)+", validation cost: "+str(valid_score))
                             
             if (iter%hyppar.accumulate_predictions==0):
                 # Get predicted labels from validation set
@@ -351,7 +355,8 @@ def TrainCNN():
     test_score = np.mean(test_losses)
     # Save validation error
     test_error = test_score
-    print("Test error: "+str(test_error))
+    file_io.wout("\nDone. \n")
+    file_io.wout("Test error: "+str(test_error))
 
     # Return values:
     statistics.saveParameters(params)
