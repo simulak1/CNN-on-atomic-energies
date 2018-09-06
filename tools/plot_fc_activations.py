@@ -10,36 +10,40 @@ A script tp plot FC activations.
   arguments specify which nodes to plot.
 '''
 
-# Density of the iteration plots
-plot_period=1
-
-Narg = len(sys.argv)
-
-if Narg>1:
-    fclayer=int(sys.argv[1])
-else:
-    print("Which layer?")
-plot_true_dist=False
-for word in sys.argv:
-    if word=="-PV":
+# Ask for number of fclayers
+Nlayers = int(raw_input("How many fully connected layers?\n"))
+while(Nlayers<0):
+    Nlayers = int(raw_input("Give a positive number\n"))
+fclayer = int(raw_input("Which layer is to be plotted? (1=first)\n"))-1
+while(fclayer<0 or fclayer>Nlayers-1):
+    fclayer = int(raw_input("Do better.\n"))-1
+if(Nlayers==fclayer+1):
+    ptd= int(raw_input("Plot against the true distribution (0=NO, 1=YES)?\n"))
+    while(ptd<0 or ptd>1):
+        ptd= int(raw_input("Plot against the true distribution (0=NO, 1=YES)?\n"))
+    if(ptd==1):
         plot_true_dist=True
-
+        Xdata=np.load('validation_features.npy')
+        Ydata=np.load('validation_targets.npy')
+    else:
+        plot_true_dist=False
+else:
+    plot_true_dist=False
+plot_period=int(raw_input("How many iterations to skip between plots?\n"))+1
+while(plot_period<1):
+    plot_period=int(raw_input("Skip more lines\n"))+1
 A0 = np.load('activations_fclayer'+str(fclayer)+'.npy')
-
-Xdata=np.load('validation_features.npy') 
-
-Ydata=np.load('validation_targets.npy') 
-
 # Specify which nodes to plot
 nodes=[]
-if(Narg>3):
-    idx=0
-    for i in range(3,Narg):
-        nodes.append(int(sys.argv[i]))
-else:
-    nodes=np.arange(len(A0[0,:,0]))
+nod=1
+while(nod>0):
+    nod=int(raw_input("Add a node to plot(0: no more, -1: all):\n"))
+    if(nod==-1):
+        nodes=np.arange(len(A0[0,:,0]))
+    elif(nod>0):
+        nodes.append(nod-1)
 
-
+print(A0.shape)
 Niter=len(A0)
 Nnodes=len(nodes)
 plt.ion()

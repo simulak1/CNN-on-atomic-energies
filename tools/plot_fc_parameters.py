@@ -9,37 +9,26 @@ A script to plot a random set of weights and biases of a fully connected layer.
 
 - Specify layer and number of samples in input.
 
-- Weakness: Random samples may produce duoplicates, therefore Nsamples is not
+- Weakness: Random samples may produce duplicates, therefore Nsamples is not
   always the correct number. 
 '''
 
 rd.seed(23345)
 
-cmd = sys.argv[1:]
-
 ind = 0
 layer = 0
 Nsamples=99999999999999999999
 
-# Parse command line arguments
-for word in cmd:
-    if word[0]=="-":
-        vipu = word[1:]
-        if(vipu=="layer")   : layer=int(cmd[ind+1])
-        if(vipu=="samples") : Nsamples=int(cmd[ind+1])
-    ind=ind+1    
-
+layer=int(raw_input("Which fully connected layer to plot?\n"))-1
 # Load weights and biases
 w=np.load('weights_fclayer'+str(layer)+'.npy')
 b=np.load('biases_fclayer'+str(layer)+'.npy')
-
-# Print info on the command line
 print("\n Plotting weights of fully connected layer "+str(layer)+'. \n')
 print("Shape of the layer:")
 print(w[0].shape)
 xdim=w[0].shape[0]
 ydim=w[0].shape[1]
-print("\n")
+Nsamples=int(raw_input("How many random samples to include in the plot?\n"))
 if(Nsamples<w[0].size):
     print(str(Nsamples)+" random samples will be plotted.")
 else:
