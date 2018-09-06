@@ -11,16 +11,16 @@ A script tp plot FC activations.
 '''
 
 # Ask for number of fclayers
-Nlayers = int(raw_input("How many fully connected layers?\n"))
+Nlayers = int(input("How many fully connected layers?\n"))
 while(Nlayers<0):
-    Nlayers = int(raw_input("Give a positive number\n"))
-fclayer = int(raw_input("Which layer is to be plotted? (1=first)\n"))-1
+    Nlayers = int(input("Give a positive number\n"))
+fclayer = int(input("Which layer is to be plotted? (1=first)\n"))-1
 while(fclayer<0 or fclayer>Nlayers-1):
-    fclayer = int(raw_input("Do better.\n"))-1
+    fclayer = int(input("Do better.\n"))-1
 if(Nlayers==fclayer+1):
-    ptd= int(raw_input("Plot against the true distribution (0=NO, 1=YES)?\n"))
+    ptd= int(input("Plot against the true distribution (0=NO, 1=YES)?\n"))
     while(ptd<0 or ptd>1):
-        ptd= int(raw_input("Plot against the true distribution (0=NO, 1=YES)?\n"))
+        ptd= int(input("Plot against the true distribution (0=NO, 1=YES)?\n"))
     if(ptd==1):
         plot_true_dist=True
         Xdata=np.load('validation_features.npy')
@@ -29,15 +29,15 @@ if(Nlayers==fclayer+1):
         plot_true_dist=False
 else:
     plot_true_dist=False
-plot_period=int(raw_input("How many iterations to skip between plots?\n"))+1
+plot_period=int(input("How many iterations to skip between plots?\n"))+1
 while(plot_period<1):
-    plot_period=int(raw_input("Skip more lines\n"))+1
+    plot_period=int(input("Skip more lines\n"))+1
 A0 = np.load('activations_fclayer'+str(fclayer)+'.npy')
 # Specify which nodes to plot
 nodes=[]
 nod=1
 while(nod>0):
-    nod=int(raw_input("Add a node to plot(0: no more, -1: all):\n"))
+    nod=int(input("Add a node to plot(0: no more, -1: all):\n"))
     if(nod==-1):
         nodes=np.arange(len(A0[0,:,0]))
     elif(nod>0):

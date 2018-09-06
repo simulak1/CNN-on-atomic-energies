@@ -19,7 +19,7 @@ ind = 0
 layer = 0
 Nsamples=99999999999999999999
 
-layer=int(raw_input("Which fully connected layer to plot?\n"))-1
+layer=int(input("Which fully connected layer to plot?\n"))-1
 # Load weights and biases
 w=np.load('weights_fclayer'+str(layer)+'.npy')
 b=np.load('biases_fclayer'+str(layer)+'.npy')
@@ -28,7 +28,7 @@ print("Shape of the layer:")
 print(w[0].shape)
 xdim=w[0].shape[0]
 ydim=w[0].shape[1]
-Nsamples=int(raw_input("How many random samples to include in the plot?\n"))
+Nsamples=int(input("How many random samples to include in the plot?\n"))
 if(Nsamples<w[0].size):
     print(str(Nsamples)+" random samples will be plotted.")
 else:
