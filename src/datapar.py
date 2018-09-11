@@ -51,12 +51,12 @@ def splitDataset():
     global Xdata
     global Ydata
 
-    Xtrain=np.zeros((Ntrain,xdim*ydim))
-    Ytrain=np.zeros((Ntrain,1))
-    Xval=np.zeros((Nval,xdim*ydim))
-    Yval=np.zeros((Nval,1))
-    Xtest=np.zeros((Ntest,xdim*ydim))
-    Ytest=np.zeros((Ntest,1))
+    Xtrain=np.zeros((Ntrain,xdim*ydim),dtype=np.float32)
+    Ytrain=np.zeros((Ntrain,1),dtype=np.float32)
+    Xval=np.zeros((Nval,xdim*ydim),dtype=np.float32)
+    Yval=np.zeros((Nval,1),dtype=np.float32)
+    Xtest=np.zeros((Ntest,xdim*ydim),dtype=np.float32)
+    Ytest=np.zeros((Ntest,1),dtype=np.float32)
     
     if (hyppar.target_type=='int'):
         for i in range(Nval):
@@ -73,15 +73,15 @@ def splitDataset():
     else:
         for i in range(Nval):
             Xval[i,:]=Xdata[i,:,:].flatten(0)
-            Yval[i,0]=float(Ydata[i,0])
+            Yval[i,0]=Ydata[i,0]
         for i in range(Ntrain):
             ind=Nval+i
             Xtrain[i,:]=Xdata[ind,:,:].flatten(0)
-            Ytrain[i,0]=float(Ydata[ind,0])
+            Ytrain[i,0]=Ydata[ind,0]
         for i in range(Ntest):
             ind=Nval+Ntrain+i
             Xtest[i,:]=Xdata[ind,:,:].flatten(0)
-            Ytest[i,0]=float(Ydata[ind,0])
+            Ytest[i,0]=Ydata[ind,0]
                                                                                             
         
     # ONEHOT_ENCODING: (Not currently used)
@@ -107,19 +107,19 @@ def loadDataPoints():
     
     step=0
     
-    Xdata=np.zeros((Ndata,xdim,ydim))
+    Xdata=np.zeros((Ndata,xdim,ydim),dtype=np.float32)
     for i in np.arange(Ndata):
-        X=np.loadtxt(datapath+'/Xdata/'+str(i))
+        X=np.loadtxt(datapath+'/Xdata/'+str(i),dtype=np.float32)
         if(xdim>1 and ydim==1):
-            XX=np.zeros((xdim,1))
+            XX=np.zeros((xdim,1),dtype=np.float32)
             XX[:,0]=X
             X=XX
         Xdata[step,:,:]=X
         step=step+1
         
 
-    Ydata=np.zeros((Ndata,1))
-    Ydata_vector=np.loadtxt(datapath+'/Ydata')
+    Ydata=np.zeros((Ndata,1),dtype=np.float32)
+    Ydata_vector=np.loadtxt(datapath+'/Ydata',dtype=np.float32)
     for i in range(Ndata):
         Ydata[i,0]=Ydata_vector[i]
 

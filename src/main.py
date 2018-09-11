@@ -14,6 +14,8 @@ import os
 import time
 print('******* Import complete *******')
 
+print(theano.__version__)
+
 t0=time.time()
 
 # Remove existing output files

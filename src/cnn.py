@@ -15,22 +15,28 @@ def gradient_updates_Adam(cost, params, learning_rate):
     # Outputs:
     # updates : updates to be made and to be defined in the train_model function.
     updates = []
-    eps = 1e-4 # small constant used for numerical stabilization.
-    beta1 = 0.9
-    beta2 = 0.999
+    eps = np.float32(1e-4) # small constant used for numerical stabilization.
+    beta1 = np.float32(0.9)
+    beta2 = np.float32(0.999)
+    one=np.float32(1.0)
+    two=np.float32(2.0)
     # beta1 and beta2 are the exponential decay rates
     # for moment estimates, in [0,1).
     # suggested defaults: 0.9 and 0.999 respectively
     for param in params:
-        t = theano.shared(1)
+        t = theano.shared(np.float32(1))
         s = theano.shared(param.get_value(borrow=True)*0.)
         r = theano.shared(param.get_value(borrow=True)*0.)
-        s_new = beta1*s + (1.0-beta1)*T.grad(cost, param)
-        r_new = beta2*r + (1.0-beta2)*(T.grad(cost, param)**2)
+        s_new = beta1*s + (one-beta1)*T.grad(cost, param)
+        r_new = beta2*r + (one-beta2)*(T.grad(cost, param)**two)
+        #s_new = T.cast(s_new_64,dtype='float32')
+        #r_new = T.cast(r_new_64,dtype='float32')
         updates.append((s, s_new))
         updates.append((r, r_new))
         s_hat = s_new/(1-beta1**t)
         r_hat = r_new/(1-beta2**t)
+        #s_hat = T.cast(s_hat_64,dtype='float32')
+        #r_hat = T.cast(r_hat_64,dtype='float32')
         updates.append((param, param - learning_rate*s_hat/(np.sqrt(r_hat)+eps) ))
     updates.append((t, t + 1))
     return updates
@@ -72,11 +78,11 @@ def convLayer(rng, data_input, filter_spec, image_spec, pool_size, activation):
     
     # Weigths
     W = theano.shared(
-        np.asarray(rng.normal(loc=0, scale=0.1, size=filter_spec)),
+        np.asarray(rng.normal(loc=0, scale=0.1, size=filter_spec).astype(np.float32),dtype=np.float32),
         borrow=True)
     # Bias is a 1 D tensor -- one bias per output feature map.
     # Initialised with zeros.
-    b = theano.shared(np.zeros((filter_spec[0],)), borrow=True)
+    b = theano.shared(np.zeros((filter_spec[0],),dtype=np.float32), borrow=True)
     
     # Convolve input with specifications. This is Theano's convolution
     # function. It takes as input the data tensor, filter weights, filter
@@ -127,14 +133,15 @@ def fullyConnectedLayer(rng,data_input, num_in,num_out,activation):
         value=np.asarray(
             rng.uniform(low=-w_bound,
                         high=w_bound,
-                        size=(num_in,num_out))),
+                        size=(num_in,num_out)).astype(np.float32),
+            dtype=np.float32),
         name='W',
         borrow=True)
     
     # Creating a shared variable for biases that are initialised with
     # zeros.
     b = theano.shared(
-        value=np.zeros((num_out,)),
+        value=np.zeros((num_out,),dtype=np.float32),
         name='b',
         borrow=True)
     
@@ -230,7 +237,7 @@ def class_errors(y_pred,y):
     labels=T.argmax(y,axis=1)
     preds=T.argmax(y_pred,axis=1)
     
-    count_error = T.mean(T.neq(preds, labels))
+    count_error = T.mean(T.neq(preds, labels),dtype=T.config.floatX)
     return count_error
 
 

@@ -46,10 +46,10 @@ def shared_dataset(data_x, data_y, sample_size=2400, borrow=True):
     data_y = data_y[indices,:]
     
     shared_x = theano.shared(np.asarray(data_x,
-                                        dtype=theano.config.floatX),
+                                        dtype=np.float32),
                              borrow=borrow)
     shared_y = theano.shared(np.asarray(data_y,
-                                        dtype=theano.config.floatX),
+                                        dtype=np.float32),
                              borrow=borrow)
     return shared_x, shared_y, (data_x, data_y)
 
@@ -67,10 +67,10 @@ def shared_dataset_2(data_x, data_y, sample_size=2400, borrow=True):
     data_y = data_y[indices]
         
     shared_x = theano.shared(np.asarray(data_x,
-                                    dtype=theano.config.floatX),
+                                    dtype=np.float32),
                              borrow=borrow)
     shared_y = theano.shared(np.asarray(data_y,
-                                        dtype=theano.config.floatX),
+                                        dtype=np.float32),
                              borrow=borrow)
     return shared_x, shared_y, (data_x, data_y)
 
