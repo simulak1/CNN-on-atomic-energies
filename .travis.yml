@@ -10,7 +10,7 @@ install:
   - pip install theano
 
 script:
-  - pytest
+  - THEANO_FLAGS="floatX=float32" pytest
 
 notifications:
 email: false

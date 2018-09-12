@@ -60,12 +60,12 @@ def test_fullyConnectedLayer():
     NOTE: Activations are done out of FC layer, since for atomic calculations
           linear activation is used.
     '''
-    pi=3.14159265358
+    pi=np.float32(3.14159265358)
 
-    xtrain=np.linspace(0,7,300)
+    xtrain=np.linspace(0,7,300,dtype='float32')
     ytrain=np.sin(xtrain)
 
-    Xtrain=np.zeros((300,1))
+    Xtrain=np.zeros((300,1),dtype='float32')
     for i in range(300):
         Xtrain[i]=xtrain[i]
 
@@ -109,26 +109,26 @@ def test_fullyConnectedLayer():
 
 def test_gradient_updates_Adam():
     # Find minimum of a parabola
-    x = T.matrix('x')
-    w = theano.shared(100.0,borrow=True)
-    h = T.dot(x,w)
-    cost=T.mean(h**2)
+    x = T.scalar('x')
+    w = theano.shared(np.float32(100.0),borrow=True)
+    h = T.mul(w,x)
+    cost=T.sqr(h)
     
-    updates=cnn.gradient_updates_Adam(cost,[w],10)
+    updates=cnn.gradient_updates_Adam(cost,[w],np.float32(10.0))
     
     f=theano.function([x],cost,updates=updates)
     for i in range(100):
-        cost_i=f(np.ones((1,1)))
+        cost_i=f(np.ones((1,1),dtype='float32'))
     assert cost_i < 0.06
     
     x2 = T.matrix('x2')
-    w2 = theano.shared(10.0,borrow=True)
+    w2 = theano.shared(np.float32(10.0),borrow=True)
     h2 = T.dot(x2,w2)
     cost2 = T.mean(T.sin(h2)**2+0.1*h2**2)
 
-    updates2=cnn.gradient_updates_Adam(cost2,[w2],0.1)
+    updates2=cnn.gradient_updates_Adam(cost2,[w2],np.float32(0.1))
 
     f2=theano.function([x2],cost2,updates=updates2)
     for i in range(200):
-        cost_i2=f2(np.ones((1,1)))
+        cost_i2=f2(np.ones((1,1),dtype='float32'))
     assert cost_i2 < 1
