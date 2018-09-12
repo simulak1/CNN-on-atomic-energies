@@ -118,7 +118,7 @@ def test_gradient_updates_Adam():
     
     f=theano.function([x],cost,updates=updates)
     for i in range(100):
-        cost_i=f(np.ones((1,1),dtype='float32'))
+        cost_i=f(np.float32(1))
     assert cost_i < 0.06
     
     x2 = T.matrix('x2')

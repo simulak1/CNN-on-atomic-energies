@@ -25,8 +25,8 @@ def gradient_updates_Adam(cost, params, learning_rate):
     # suggested defaults: 0.9 and 0.999 respectively
     for param in params:
         t = theano.shared(np.float32(1))
-        s = theano.shared(param.get_value(borrow=True)*0.)
-        r = theano.shared(param.get_value(borrow=True)*0.)
+        s = theano.shared(param.get_value(borrow=True)*np.float32(0.0))
+        r = theano.shared(param.get_value(borrow=True)*np.float32(0.0))
         s_new = beta1*s + (one-beta1)*T.grad(cost, param)
         r_new = beta2*r + (one-beta2)*(T.grad(cost, param)**two)
         #s_new = T.cast(s_new_64,dtype='float32')
