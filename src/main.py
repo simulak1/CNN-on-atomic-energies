@@ -14,7 +14,7 @@ import os
 import time
 print('******* Import complete *******')
 
-print(theano.__version__)
+#theano.config.mode('FAST_RUN')
 
 t0=time.time()
 
