@@ -14,9 +14,8 @@ import os
 import time
 print('******* Import complete *******')
 
-#theano.config.mode('FAST_RUN')
-
 t0=time.time()
+
 
 # Remove existing output files
 if os.path.isfile("ITER"):
