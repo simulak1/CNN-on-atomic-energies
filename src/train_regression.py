@@ -9,6 +9,7 @@ import datapar
 import load_data
 import statistics
 import file_io
+from theano.tests.breakpoint import PdbBreakpoint
 
 def CNNStructure(input,mini_batch_size,rng):
     
@@ -57,6 +58,7 @@ def CNNStructure(input,mini_batch_size,rng):
     for i in range(NCL):
         [layer_output, layer_params] = cnn.convLayer(
             rng,
+
             data_input=input,
             image_spec=(mini_batch_size, Nchannel[i], image_spec_x[i], image_spec_y[i]),
             filter_spec=(Nchannel[i+1], Nchannel[i], filter[i][0], filter[i][1]),
@@ -67,13 +69,12 @@ def CNNStructure(input,mini_batch_size,rng):
         params = params + layer_params
         input = layer_output
 
-
     if(NCL>0):
         fc_layer_input = layer_output.flatten(2)
-        num_in = Nchannel[NCL]*image_spec_x[-1]*image_spec_y[-1]
+        dim_in = Nchannel[NCL]*image_spec_x[-1]*image_spec_y[-1]
     else:
         fc_layer_input = input.flatten(2)
-        num_in = image_spec_x[0]*image_spec_y[0]
+        dim_in = image_spec_x[0]*image_spec_y[0]
 
     fc_output = []
     for i in range(NFC):
@@ -81,10 +82,10 @@ def CNNStructure(input,mini_batch_size,rng):
         [y_pred, fc_layer_params] = cnn.fullyConnectedLayer(
             rng=rng,
             data_input=fc_layer_input,
-            num_in=num_in, # Is this unstylish? Maybe.
+            num_in=dim_in,
             num_out=fc_out[i],
             activation=fc_activation[i])
-        num_in=fc_out[i]
+        dim_in=fc_out[i]
         fc_output = fc_output + [y_pred]
         params = params + fc_layer_params
         fc_layer_input = y_pred
@@ -161,7 +162,9 @@ def TrainCNN():
     
     # Cost that is minimised during stochastic descent. Includes regularization
     cost = hyppar.cost_function(y_pred,y)
-    
+
+
+    #theano.printing.pydotprint(cost, outfile="Pics/logreg_pydotprint_cost.png", var_with_name_simple=True)
     #L2_reg=0
     #for i in range(len(params)):
     #    L2_reg=L2_reg+T.mean(T.sqr(params[i][0]))
