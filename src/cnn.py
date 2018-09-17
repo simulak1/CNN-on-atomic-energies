@@ -128,12 +128,14 @@ def fullyConnectedLayer(rng,data_input, num_in,num_out,activation):
     # Creating a shared variable for weights that are initialised with samples
     # drawn from a gaussian distribution with 0 mean and standard deviation of
     # 0.1. This is just a random initialisation.
+
+
     w_bound=np.sqrt(6./(num_in+num_out))
     W = theano.shared(
         value=np.asarray(
             rng.uniform(low=-w_bound,
                         high=w_bound,
-                        size=(num_in,num_out)).astype(np.float32),
+                        size=(num_in,num_out)),
             dtype=np.float32),
         name='W',
         borrow=True)
@@ -146,6 +148,7 @@ def fullyConnectedLayer(rng,data_input, num_in,num_out,activation):
         borrow=True)
     
     # Compute predicted energies
+
     
     E_pred = activation(T.dot(data_input, W) + b)
         

@@ -10,6 +10,7 @@ import load_data
 import statistics
 import file_io
 from theano.tests.breakpoint import PdbBreakpoint
+import time
 
 def CNNStructure(input,mini_batch_size,rng):
     
@@ -143,7 +144,7 @@ def TrainCNN():
     y = T.matrix('y')
     
     file_io.wout('***** Constructing model ***** ')
-    
+    t0=time.time()
     # Reshaping tensor of mini_batch_size set of images into a
     # 4-D tensor of dimensions: (mini_batch_size , 1 , in_x , in_y)
     xdim=hyppar.in_x
@@ -163,8 +164,8 @@ def TrainCNN():
     # Cost that is minimised during stochastic descent. Includes regularization
     cost = hyppar.cost_function(y_pred,y)
 
-
     #theano.printing.pydotprint(cost, outfile="Pics/logreg_pydotprint_cost.png", var_with_name_simple=True)
+
     #L2_reg=0
     #for i in range(len(params)):
     #    L2_reg=L2_reg+T.mean(T.sqr(params[i][0]))
@@ -217,8 +218,7 @@ def TrainCNN():
         givens={
             x : valid_set_x[
                 mb_index * mini_batch_size:
-                (mb_index+1) * mini_batch_size
-                
+                (mb_index+1) * mini_batch_size                
             ]})
 
     # Get list of convlayer activation tensors
@@ -226,7 +226,9 @@ def TrainCNN():
         get_activations = theano.function(
             [],
             cn_output,
-            givens={x: valid_set_x[rset]})
+            givens={x: valid_set_x[
+                    rset]
+                    })
 
     # Get list of FC layer activation tensors
     if(hyppar.NFC>0):
@@ -295,7 +297,8 @@ def TrainCNN():
 
     statistics.saveParameters(params)
 
-    
+    t1=time.time()-t0
+    file_io.wout("Time taken constructing the model: "+str(t1)+"\n")
      # This is where we call the previously defined Theano functions.
     file_io.wout('***** Training model *****')
     while (epoch < num_epochs):
